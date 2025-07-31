@@ -5,6 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Beat Procrastination</title>
   <style>
+    .navbar {
+  width: 100%;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  padding: 0.75rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar ul {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar a:hover {
+  color: #0077ff;
+}
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
@@ -76,6 +105,15 @@
   </style>
 </head>
 <body>
+  <nav class="navbar">
+  <ul>
+    <li><a href="#home">Home</a></li>
+    <li><a href="#tasks">Tasks</a></li>
+    <li><a href="#timer">Timer</a></li>
+    <li><a href="#progress">Progress</a></li>
+    <li><a href="#settings">Settings</a></li>
+  </ul>
+</nav>
   <header>
     <h1>Beat Procrastination</h1>
     <p>Stay focused. Crush your goals. One timer at a time.</p>
@@ -116,6 +154,9 @@
     }
 
     startBtn.addEventListener('click', startTimer);
+    startBtn.addEventListener("click", () => {
+    startBtn.textContent = "Working...";
+    });
     updateTimer(); // initialize display
   </script>
 </body>
