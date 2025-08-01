@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beat Procrastination</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+  <ul>
+    <li><a href="#home">Home</a>d</li>
+    <li><a href="#tasks">Tasks</a></li>
+    <li><a href="#timer">Timer</a></li>
+    <li><a href="#progress">Progress</a></li>
+    <li><a href="#settings">Settings</a></li>
+  </ul>
+</nav>
+  <header>
+    <h1>Beat Procrastination</h1>
+    <p>Stay focused. Crush your goals. One timer at a time.</p>
+  </header>
+
+  <div class="timer-container">
+    <div id="timer">25:00</div>
+    <button id="startBtn">Start Timer</button>
+  </div>
+
+  <div class="quote">
+    "Made by a procrastinator for procrastinators."
+  </div>
+
+  <script>
+    // Basic Pomodoro Timer Logic
+    let timeLeft = 0.5 * 60; // 25 minutes
+    let timerInterval;
+    let isRunning = false;
+    const timerDisplay = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return; // prevent multiple intervals
+      timerInterval = setInterval(() => {
+        if(timeLeft > 0)
+      {
+        timeLeft--;
+        updateTimer();
+      }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up! Take a short break.");
+        }
+      }, 1000);
+    }
+     
+    startBtn.addEventListener("click", () => {
+      if(!isRunning)
+    {
+    startTimer();
+    isRunning = true;
+    startBtn.textContent = "Pause";
+    }
+    else
+    {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    isRunning = false;
+    startBtn.textContent = "Resume";
+    }
+    });
+    updateTimer(); // initialize display
+  </script>
+</body>
+</html>
