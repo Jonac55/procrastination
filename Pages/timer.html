@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Beat Procrastination</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+  <ul>
+    <li><a href="home.html">Home</a></li>
+    <li><a href="tasks.html">Tasks</a></li>
+    <li><a href="timer.html">Timer</a></li>
+    <li><a href="progress.html">Progress</a></li>
+    <li><a href="settings.html">Settings</a></li>
+  </ul>
+</nav>
+  <header>
+  </header>
+
+  <div class="timer-settings" id="timer-settings">
+    <label for="sessionLength">Work Time:</label>
+    <input type="number" id="sessionLength" value="25" min="15" max="60"/>
+    <label for="sessionLength">Minutes</label>
+    <br>
+    <br>
+    <label for="break1Length">Short Break Length:</label>
+    <input type="number" id="break1Length" value="5" min="1" max="15" />
+    <label for="break1Length">Minutes</label>
+    <br>
+    <br>
+    <label for="sessionLength">Long Break Length:</label>
+    <input type="number" id="break2Length" value="15" min="1" max="30"/>
+    <label for="break2Length">Minutes</label>
+    <br>
+    <button id="applySettingsBtn">Apply</button>
+  </div>
+
+  <div class="error" id="error-message">
+    <p id="work-error">Please enter a value between 15 and 60 minutes for Work Time</p>
+    <p id="break1-error">Please enter a value between 1 and 15 minutes for Short Break</p>
+    <p id="break2-error">Please enter a value between 1 and 30 minutes for Long Break</p>
+    <p id="integer-error">Please enter integer values only</p>
+  </div>
+
+  <div class="timer-container">
+    <p for="timer">Work Time</p>
+    <div id="timer">25:00</div>
+    <button id="startBtn">Start Timer</button>
+  </div>
+
+  <div class="quote">
+    "Made by a procrastinator for procrastinators."
+  </div>
+
+  <script>
+    // Basic Pomodoro Timer Logic
+    let timeLeft = 25 * 60; // 25 minutes
+    let timerInterval;
+    let isRunning = false;
+    const timerDisplay = document.getElementById('timer');
+    const startBtn = document.getElementById('startBtn');
+    const applySettingsBtn = document.getElementById('applySettingsBtn')
+    const sessionLength = document.getElementById('sessionLength')
+    const break1Length = document.getElementById('break1Length');
+    const break2Length = document.getElementById('break2Length');
+
+
+    function updateTimer() {
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
+      timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function startTimer() {
+      if (timerInterval) return; // prevent multiple intervals
+      timerInterval = setInterval(() => {
+        if(timeLeft > 0)
+      {
+        timeLeft--;
+        updateTimer();
+      }
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up! Take a short break.");
+        }
+      }, 1000);
+    }
+    
+    applySettingsBtn.addEventListener("click", () => {
+        let sessionInputValue = sessionLength.value;
+        let break1InputValue = break1Length.value;
+        let break2InputValue = break2Length.value;
+        let allValid = true;
+
+        if(sessionInputValue > 60 || sessionInputValue < 15){
+          $("#work-error").fadeIn(1000);
+          $("#work-error").fadeOut(3000);
+          allValid = false;
+        }
+
+        if(break1InputValue > 15 || break1InputValue < 1){
+          $("#break1-error").fadeIn(1000);
+          $("#break1-error").fadeOut(3000);
+          allValid = false;
+        }
+
+        if(break2InputValue > 30 || break2InputValue < 1){
+          $("#break2-error").fadeIn(1000);
+          $("#break2-error").fadeOut(3000);
+          allValid = false;
+        }
+
+        if(!(sessionInputValue%1 == 0)){
+          $("#integer-error").fadeIn(1000);
+          $("#integer-error").fadeOut(3000);
+          allValid = false;
+        }
+        if(!(sessionInputValue > 60 || sessionInputValue < 15 || break1InputValue > 15 || break1InputValue < 1 || break2InputValue > 30 || break2InputValue < 1 || !(sessionInputValue%1 == 0))){
+        if(!isRunning)
+        {
+          timeLeft = sessionInputValue * 60; // update timeLeft based on input
+          updateTimer();
+          if(timerInterval) {
+            clearInterval(timerInterval);
+            timerInterval = null;
+          }
+          isRunning = false;
+          startBtn.textContent = "Start Timer";
+        }
+      }
+        if(allValid)
+        {
+          $("#timer-settings").fadeOut(500);
+        }
+      
+    })
+
+    startBtn.addEventListener("click", () => {
+      if(!isRunning)
+    {
+    startTimer();
+    isRunning = true;
+    startBtn.textContent = "Pause";
+    }
+    else
+    {
+    clearInterval(timerInterval);
+    timerInterval = null;
+    isRunning = false;
+    startBtn.textContent = "Resume";
+    }
+    });
+    updateTimer(); // initialize display
+
+    $("#work-error").hide();
+    $("#break1-error").hide();
+    $("#break2-error").hide();
+    $("#integer-error").hide();
+  </script>
+</body>
+</html>
